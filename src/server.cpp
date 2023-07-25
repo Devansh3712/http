@@ -32,10 +32,6 @@ namespace http {
             std::cout << std::strerror(errno);
             exit(EXIT_FAILURE);
         }
-        // if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(opt)) == -1) {
-        //     std::cout << std::strerror(errno);
-        //     exit(EXIT_FAILURE);
-        // }
 
         // An IP socket address is defined as a combination of an IP interface
         // address and a 16-bit port number.
