@@ -19,7 +19,7 @@ void root(http::Request &req, http::Response &res) {
     switch (method) {
     case http::Method::GET:
         res.set_status(http::Status::OK);
-        res.set_header("Content-Type", "text/plain");
+        res.set_content_type(http::MIME::TXT);
         res.set_body("Hello World!");
         return;
     default:
