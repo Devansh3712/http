@@ -36,6 +36,14 @@ int main() {
 }
 ```
 
+### To Do
+
+- [ ] Create Enum class for MIME types
+- [ ] Add cookie methods to `Message` class
+- [ ] Parse cookie in `Request` constructor
+- [ ] Overload `<<` operator for `Request` and `Response`
+- [ ] Create a JSON parser
+
 References:
 
 - https://github.com/trungams/http-server
