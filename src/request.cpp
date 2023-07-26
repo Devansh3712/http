@@ -53,6 +53,18 @@ namespace http {
 
     std::string Request::get_query(const std::string &key) { return _query[key]; }
 
+    // An HTTP request is composed of
+    // - Start line: Consists of HTTP method, request target and HTTP version
+    // - Headers: A case insensitive string followed by a colon (:) and a value
+    //            whose structure depends upon the header.
+    // - Body: Some requests send data to the server in order to update it.
+    //
+    // GET /api/v1 HTTP/1.1
+    // Host: localhost:8080
+    // User-Agent: Mozilla/5.0 ...
+    // Accept-Encoding: gzip, deflate
+    // Connection: keep-alive
+    // Content-Type: application/json
     std::string Request::to_string() {
         std::ostringstream stream;
         stream << http::to_string(_method) << ' ';

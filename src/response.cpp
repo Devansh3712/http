@@ -15,6 +15,17 @@ namespace http {
 
     void Response::set_status_code(const Status &status_code) { _status_code = status_code; }
 
+    // An HTTP response is composed of
+    // - Status line: Consists of HTTP version, status code and status text.
+    // - Headers: A case insensitive string followed by a colon (:) and a value
+    //            whose structure depends upon the header.
+    // - Body: Not all responses have a body.
+    //
+    // HTTP/1.1 200 OK
+    // Access-Control-Allow-Origin: *
+    // Connection: keep-alive
+    // Content-Encoding: gzip, deflate
+    // Content-Type: application/json
     std::string Response::to_string() {
         std::ostringstream stream;
         stream << _version << ' ';
