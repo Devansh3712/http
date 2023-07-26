@@ -20,8 +20,8 @@ namespace http {
         // specified as 0.
         sockfd = socket(AF_INET, SOCK_STREAM, 0);
         if (sockfd == -1) {
-            std::cout << std::strerror(errno);
-            exit(EXIT_FAILURE);
+            std::string error = std::strerror(errno);
+            throw std::runtime_error(error);
         }
 
         // setsockopt() manipulates options for the socket referred to by
@@ -29,8 +29,8 @@ namespace http {
         // API level, level is specified as SOL_SOCKET.
         const int opt = 1;
         if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) == -1) {
-            std::cout << std::strerror(errno);
-            exit(EXIT_FAILURE);
+            std::string error = std::strerror(errno);
+            throw std::runtime_error(error);
         }
 
         // An IP socket address is defined as a combination of an IP interface
@@ -58,8 +58,8 @@ namespace http {
         // It is normally necessary to assign a local address using bind()
         // before a SOCK_STREAM socket may receive connections.
         if (bind(sockfd, (sockaddr *)&addr, addr_len) == -1) {
-            std::cout << std::strerror(errno);
-            exit(EXIT_FAILURE);
+            std::string error = std::strerror(errno);
+            throw std::runtime_error(error);
         }
     }
 
@@ -75,8 +75,8 @@ namespace http {
         // backlog defines the maximum length to which the queue of pending
         // connections for sockfd may grow.
         if (listen(sockfd, SOMAXCONN) == -1) {
-            std::cout << std::strerror(errno);
-            exit(EXIT_FAILURE);
+            std::string error = std::strerror(errno);
+            throw std::runtime_error(error);
         }
 
         // accept() is used with connection-based socket types. It extracts the
