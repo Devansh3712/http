@@ -24,7 +24,7 @@ namespace http {
             for (auto item: _headers) { stream << item.first << ": " << item.second << "\r\n"; }
             stream << "\r\n";
         }
-        stream << _body << "\r\n";
+        if (!_body.empty()) { stream << _body << "\r\n"; }
         return stream.str();
     }
 

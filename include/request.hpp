@@ -18,6 +18,7 @@ namespace http {
         Request(const std::string &request);
         void set_method(const Method &method);
         std::string get_query(const std::string &key);
+        std::string to_string();
         Method method();
         std::string path();
         std::unordered_map<std::string, std::string> query();

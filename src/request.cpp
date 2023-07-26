@@ -53,6 +53,19 @@ namespace http {
 
     std::string Request::get_query(const std::string &key) { return _query[key]; }
 
+    std::string Request::to_string() {
+        std::ostringstream stream;
+        stream << http::to_string(_method) << ' ';
+        stream << _path << ' ';
+        stream << _version << "\r\n";
+        if (!_headers.empty()) {
+            for (auto item: _headers) { stream << item.first << ": " << item.second << "\r\n"; }
+            stream << "\r\n";
+        }
+        if (!_body.empty()) { stream << _body << "\r\n"; }
+        return stream.str();
+    }
+
     Method Request::method() { return _method; }
 
     std::string Request::path() { return _path; }

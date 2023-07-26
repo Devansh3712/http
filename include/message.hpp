@@ -16,6 +16,7 @@ namespace http {
         void set_header(const std::string &key, const std::string &value);
         void remove_header(const std::string &key);
         std::string get_header(const std::string &key);
+        virtual std::string to_string() = 0;
         std::string body();
         std::string version();
         std::unordered_map<std::string, std::string> headers();
