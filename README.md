@@ -38,7 +38,7 @@ int main() {
 
 ### To Do
 
-- [ ] Create Enum class for MIME types
+- [x] Create Enum class for common MIME types
 - [ ] Add cookie methods to `Message` class
 - [ ] Parse cookie in `Request` constructor
 - [ ] Overload `<<` operator for `Request` and `Response`

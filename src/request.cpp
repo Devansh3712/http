@@ -43,9 +43,17 @@ namespace http {
             std::getline(header_stream, key, ':');
             std::getline(header_stream, value);
             // Remove whitespaces
-            key.erase(std::remove(key.begin(), key.end(), ' '), key.end());
-            value.erase(std::remove(value.begin(), value.end(), ' '), value.end());
+            key.erase(std::remove_if(key.begin(), key.end(), ::isspace), key.end());
+            value.erase(std::remove_if(value.begin(), value.end(), ::isspace), value.end());
             _headers[key] = value;
+        }
+
+        // Parse content type from headers
+        if (_headers.find(CONTENT_TYPE) != _headers.end()) {
+            stream.clear();
+            stream.str(_headers[CONTENT_TYPE]);
+            std::getline(stream, value, ';');
+            _content_type = to_mime_type(value);
         }
     }
 

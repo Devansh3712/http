@@ -11,6 +11,10 @@ namespace http {
         _headers[key] = value;
     }
 
+    void Message::set_content_type(const MIME &mime_type) {
+        set_header(CONTENT_TYPE, http::to_string(mime_type));
+    }
+
     void Message::remove_header(const std::string &key) { _headers.erase(key); }
 
     std::string Message::get_header(const std::string &key) { return _headers[key]; }
@@ -18,6 +22,8 @@ namespace http {
     std::string Message::body() { return _body; }
 
     std::string Message::version() { return _version; }
+
+    MIME Message::content_type() { return _content_type; }
 
     std::unordered_map<std::string, std::string> Message::headers() {
         return _headers;
