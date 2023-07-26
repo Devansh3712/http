@@ -16,6 +16,17 @@ namespace http {
         stream >> method >> _path >> _version;
         _method = http::to_method(method);
 
+        // Parse query parameters
+        stream.clear();
+        stream.str(_path);
+        std::getline(stream, line, '?');
+        while (std::getline(stream, line, '&')) {
+            std::istringstream query_stream(line);
+            std::getline(query_stream, key, '=');
+            std::getline(query_stream, value);
+            _query[key] = value;
+        }
+
         // Parse header and body
         left = right + 2;
         right = request.find("\r\n\r\n", left);
@@ -40,7 +51,13 @@ namespace http {
 
     void Request::set_method(const Method &method) { _method = method; }
 
+    std::string Request::get_query(const std::string &key) { return _query[key]; }
+
     Method Request::method() { return _method; }
 
     std::string Request::path() { return _path; }
+
+    std::unordered_map<std::string, std::string> Request::query() {
+        return _query;
+    }
 }
