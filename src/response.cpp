@@ -26,6 +26,7 @@ namespace http {
     // Connection: keep-alive
     // Content-Encoding: gzip, deflate
     // Content-Type: application/json
+    // Set-Cookie: token=21112003; initials=PP
     std::string Response::to_string() {
         std::ostringstream stream;
         stream << _version << ' ';
@@ -33,8 +34,13 @@ namespace http {
         stream << http::to_string(_status_code) << "\r\n";
         if (!_headers.empty()) {
             for (auto item: _headers) { stream << item.first << ": " << item.second << "\r\n"; }
+        }
+        if (!_cookies.empty()) {
+            stream << SET_COOKIE << ": ";
+            for (auto item: _cookies) { stream << item.first << '=' << item.second << "; "; }
             stream << "\r\n";
         }
+        stream << "\r\n";
         if (!_body.empty()) { stream << _body << "\r\n"; }
         return stream.str();
     }

@@ -1,5 +1,7 @@
 #include "../include/request.hpp"
 
+#include <iostream>
+
 namespace http {
     Request::Request() {}
 
@@ -55,6 +57,19 @@ namespace http {
             std::getline(stream, value, ';');
             _content_type = to_mime_type(value);
         }
+
+        // Parse cookies from headers
+        if (_headers.find(COOKIE) != _headers.end()) {
+            stream.clear();
+            stream.str(_headers[COOKIE]);
+            while (std::getline(stream, line, ';')) {
+                std::istringstream cookie_stream(line);
+                std::getline(cookie_stream, key, '=');
+                std::getline(cookie_stream, value);
+                _cookies[key] = value;
+            }
+            _headers.erase(COOKIE);
+        }
     }
 
     void Request::set_method(const Method &method) { _method = method; }
@@ -73,6 +88,7 @@ namespace http {
     // Accept-Encoding: gzip, deflate
     // Connection: keep-alive
     // Content-Type: application/json
+    // Cookie: token=10022004; initials=TG
     std::string Request::to_string() {
         std::ostringstream stream;
         stream << http::to_string(_method) << ' ';
@@ -80,8 +96,13 @@ namespace http {
         stream << _version << "\r\n";
         if (!_headers.empty()) {
             for (auto item: _headers) { stream << item.first << ": " << item.second << "\r\n"; }
+        }
+        if (!_cookies.empty()) {
+            stream << COOKIE << ": ";
+            for (auto item: _cookies) { stream << item.first << '=' << item.second << "; "; }
             stream << "\r\n";
         }
+        stream << "\r\n";
         if (!_body.empty()) { stream << _body << "\r\n"; }
         return stream.str();
     }
