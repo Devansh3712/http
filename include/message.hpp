@@ -6,6 +6,10 @@
 
 #include "mimes.hpp"
 
+// CRLF consists of two characters - CR (Carriage Return) and
+// LF (Line Feed). It is used as delimiter in HTTP messages.
+#define CRLF "\r\n"
+#define DEFAULT_HTTP_VERSION "HTTP/1.1"
 #define CONTENT_TYPE "Content-Type"
 #define COOKIE "Cookie"
 #define SET_COOKIE "Set-Cookie"

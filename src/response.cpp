@@ -31,17 +31,17 @@ namespace http {
         std::ostringstream stream;
         stream << _version << ' ';
         stream << http::to_code(_status_code) << ' ';
-        stream << http::to_string(_status_code) << "\r\n";
+        stream << http::to_string(_status_code) << CRLF;
         if (!_headers.empty()) {
-            for (auto item: _headers) { stream << item.first << ": " << item.second << "\r\n"; }
+            for (auto item: _headers) { stream << item.first << ": " << item.second << CRLF; }
         }
         if (!_cookies.empty()) {
             stream << SET_COOKIE << ": ";
             for (auto item: _cookies) { stream << item.first << '=' << item.second << "; "; }
-            stream << "\r\n";
+            stream << CRLF;
         }
-        stream << "\r\n";
-        if (!_body.empty()) { stream << _body << "\r\n"; }
+        stream << CRLF;
+        if (!_body.empty()) { stream << _body; }
         return stream.str();
     }
 

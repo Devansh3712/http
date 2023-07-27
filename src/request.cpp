@@ -7,18 +7,24 @@ namespace http {
         std::string start_line, header, body;
         std::string method, line, key, value;
         std::istringstream stream;
-        size_t left = 0, right = 0;
+        size_t begin = 0, end = 0;
 
         // Parse start_line
-        right = request.find("\r\n", left);
-        start_line = request.substr(left, right - left);
+        end = request.find(CRLF, begin);
+        start_line = request.substr(begin, end - begin);
         stream.str(start_line);
         stream >> method >> _path >> _version;
+        // While testing, sometimes the browser (Chrome) was sending empty
+        // HTTP requests, and the http::to_method function was throwing an
+        // error. Thus, this a temporary fix while I figure out the actual
+        // problem.
+        if (method.empty() || _path.empty() || _version.empty()) { return; }
         _method = http::to_method(method);
 
         // Parse query parameters
         stream.clear();
         stream.str(_path);
+        // Remove URL from path
         std::getline(stream, line, '?');
         while (std::getline(stream, line, '&')) {
             std::istringstream query_stream(line);
@@ -28,13 +34,13 @@ namespace http {
         }
 
         // Parse header and body
-        left = right + 2;
-        right = request.find("\r\n\r\n", left);
-        if (right != std::string::npos) {
-            header = request.substr(left, right - left);
-            left = right + 4;
-            right = request.length();
-            if (left < right) { _body = request.substr(left, right - left); }
+        begin = end + 2;
+        end = request.find("\r\n\r\n", begin);
+        if (end != std::string::npos) {
+            header = request.substr(begin, end - begin);
+            begin = end + 4;
+            end = request.length();
+            if (begin < end) { _body = request.substr(begin, end - begin); }
         }
         stream.clear();
         stream.str(header);
@@ -72,6 +78,12 @@ namespace http {
 
     void Request::set_method(const Method &method) { _method = method; }
 
+    void Request::set_path(const std::string &path) { _path = path; }
+
+    void Request::set_query(const std::string &key, const std::string &value) {
+        _query[key] = value;
+    }
+
     std::string Request::get_query(const std::string &key) { return _query[key]; }
 
     // An HTTP request is composed of
@@ -91,17 +103,17 @@ namespace http {
         std::ostringstream stream;
         stream << http::to_string(_method) << ' ';
         stream << _path << ' ';
-        stream << _version << "\r\n";
+        stream << _version << CRLF;
         if (!_headers.empty()) {
-            for (auto item: _headers) { stream << item.first << ": " << item.second << "\r\n"; }
+            for (auto item: _headers) { stream << item.first << ": " << item.second << CRLF; }
         }
         if (!_cookies.empty()) {
             stream << COOKIE << ": ";
             for (auto item: _cookies) { stream << item.first << '=' << item.second << "; "; }
-            stream << "\r\n";
+            stream << CRLF;
         }
-        stream << "\r\n";
-        if (!_body.empty()) { stream << _body << "\r\n"; }
+        stream << CRLF;
+        if (!_body.empty()) { stream << _body; }
         return stream.str();
     }
 

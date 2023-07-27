@@ -17,6 +17,8 @@ namespace http {
         Request();
         Request(const std::string &request);
         void set_method(const Method &method);
+        void set_path(const std::string &path);
+        void set_query(const std::string &key, const std::string &value);
         std::string get_query(const std::string &key);
         std::string to_string();
         Method method();

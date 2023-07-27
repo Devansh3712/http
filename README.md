@@ -41,7 +41,8 @@ int main() {
 - [x] Create Enum class for common MIME types
 - [x] Add cookie methods to `Message` class
 - [x] Parse cookie in `Request` constructor
-- [ ] Overload `<<` operator for `Request` and `Response`
+- [x] Overload `<<` operator for `Request` and `Response`
+- [x] Dockerize a sample server
 - [ ] Create a JSON parser
 
 References:
