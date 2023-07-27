@@ -40,4 +40,9 @@ namespace http {
     std::unordered_map<std::string, std::string> Message::cookies() {
         return _cookies;
     }
+
+    std::ostream &operator<<(std::ostream &output, Message &message) {
+        output << message.to_string();
+        return output;
+    }
 }

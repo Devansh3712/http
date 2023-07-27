@@ -1,7 +1,5 @@
 #include "../include/request.hpp"
 
-#include <iostream>
-
 namespace http {
     Request::Request() {}
 

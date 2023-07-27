@@ -30,7 +30,7 @@ namespace http {
         int addr_len;
         sockaddr_in addr;
         std::vector<std::pair<std::regex, function>> routes;
-        void handler(Request &request, Response &response);
+        void router(Request &request, Response &response);
         void log(Request &request, Response &response, double time);
     public:
         Server(unsigned int port);

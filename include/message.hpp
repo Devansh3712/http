@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <unordered_map>
 
@@ -34,5 +35,6 @@ namespace http {
         MIME content_type();
         std::unordered_map<std::string, std::string> headers();
         std::unordered_map<std::string, std::string> cookies();
+        friend std::ostream &operator<<(std::ostream &output, Message &message);
     };
 }

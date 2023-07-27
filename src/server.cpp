@@ -99,20 +99,20 @@ namespace http {
                 if (val_read == -1) { break; }
                 request.append(buffer.cbegin(), buffer.cend());
             } while (val_read == MAX_BUFFER_SIZE);
-            Request _request(request);
+            Request req(request);
 
             // Match and serve route if present
             auto start = std::chrono::high_resolution_clock::now();
-            Response _response(_request);
-            handler(_request, _response);
-            std::string response = _response.to_string();
+            Response res(req);
+            router(req, res);
+            std::string response = res.to_string();
             if (write(new_sockfd, response.c_str(), response.size()) == -1) {
                 std::cout << std::strerror(errno);
                 continue;
             }
             auto stop = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::milli> time = stop - start;
-            log(_request, _response, time.count());
+            log(req, res, time.count());
 
             close(new_sockfd);
         }
@@ -121,7 +121,7 @@ namespace http {
     // Iterate through the routes vector and match the regex.
     // If a match is found, execute the function, else return
     // 404 NOT FOUND.
-    void Server::handler(Request &request, Response &response) {
+    void Server::router(Request &request, Response &response) {
         std::string path = request.path();
         for (auto item: routes) {
             if (std::regex_search(path, item.first)) {
