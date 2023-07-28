@@ -30,6 +30,7 @@ using function = std::function<void(http::Request&, http::Response&)>;
 namespace http {
     class Server {
     private:
+        unsigned int port;
         int sockfd;
         int addr_len;
         sockaddr_in addr;

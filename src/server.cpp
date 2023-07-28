@@ -2,6 +2,7 @@
 
 namespace http {
     Server::Server(unsigned int port) {
+        this->port = port;
         // socket(int domain, int type, int protocol) creates an endpoint
         // for communication and returns a file descriptor that refers to
         // that endpoint.
@@ -44,7 +45,7 @@ namespace http {
         // with each other, the Internet protocols specify a canonical byte
         // order convention for data transmitted over the network. This is
         // known as Network Byte Order.
-        addr.sin_port = htons(port);
+        addr.sin_port = htons(this->port);
         // sin_addr is the IP host address. s_addr contains the host interface
         // address in network byte order.
         // INADDR_ANY (0.0.0.0) means any address for binding.
@@ -78,6 +79,12 @@ namespace http {
             std::string error = std::strerror(errno);
             throw std::runtime_error(error);
         }
+
+        std::ostringstream stream;
+        stream << "Listening on: ";
+        stream << "http://" << inet_ntoa(addr.sin_addr) << ':' << port;
+        stream << std::endl;
+        std::cout << stream.str();
 
         // accept() is used with connection-based socket types. It extracts the
         // first connection request on the queue of pending connections for the
