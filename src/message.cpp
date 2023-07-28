@@ -22,6 +22,11 @@ namespace http {
         set_header(CONTENT_TYPE, http::to_string(_content_type));
     }
 
+    void Message::set_content_type(const std::string &mime_type) {
+        _content_type = to_mime_type(mime_type);
+        set_header(CONTENT_TYPE, mime_type);
+    }
+
     std::string Message::get_header(const std::string &key) { return _headers[key]; }
 
     std::string Message::get_cookie(const std::string &key) { return _cookies[key]; }

@@ -31,9 +31,23 @@ void root(http::Request &req, http::Response &res) {
 int main() {
     http::Server server(8080);
     server.handle("/", root);
+    // Handle a route using lambda function, the endpoint can be a
+    // regular expression.
+    server.handle(R"(^(\/)(.*)$)", [](http::Request &req, http::Response &res) {
+        res.set_status(http::Status::NOT_FOUND);
+    })
     server.listen_and_serve();
     return 0;
 }
+```
+
+## Running Dockerfile
+
+To run a sample server, a `docker` image can be created and run.
+
+```bash
+docker build . -t <tag>
+docker run -p 8080:8080 <tag>
 ```
 
 ### To Do

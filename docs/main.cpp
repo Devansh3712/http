@@ -3,16 +3,6 @@
 
 #include "../include/server.hpp"
 
-void styles(http::Request &req, http::Response &res) {
-    std::ifstream file;
-    std::ostringstream stream;
-    file.open("./docs/styles.css");
-    stream << file.rdbuf();
-    res.set_status_code(http::Status::OK);
-    res.set_content_type(http::MIME::CSS);
-    res.set_body(stream.str());
-}
-
 void home(http::Request &req, http::Response &res) {
     std::ifstream file;
     std::ostringstream stream;
@@ -42,8 +32,7 @@ void not_found(http::Request &req, http::Response &res) {
 
 int main() {
     http::Server server(8080);
-    // Set static files
-    server.handle("/styles.css", styles);
+    server.handle_static_files("./docs/static");
 
     server.handle(R"(^(\/)home(\/)?$)", home);
     server.handle(R"(^(\/)(.*)$)", not_found);

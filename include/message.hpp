@@ -27,6 +27,7 @@ namespace http {
         void set_body(const std::string &body);
         void set_version(const std::string &version);
         void set_content_type(const MIME &mime_type);
+        void set_content_type(const std::string &mime_type);
         void set_header(const std::string &key, const std::string &value);
         void set_cookie(const std::string &key, const std::string &value);
         std::string get_header(const std::string &key);

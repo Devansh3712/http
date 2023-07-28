@@ -5,6 +5,8 @@
 #include <chrono>
 #include <cstring>
 #include <ctime>
+#include <experimental/filesystem>
+#include <fstream>
 #include <functional>
 #include <iomanip>
 #include <iostream>
@@ -20,6 +22,8 @@
 #include "../include/response.hpp"
 
 #define MAX_BUFFER_SIZE 4096
+
+namespace fs = std::experimental::filesystem;
 
 using function = std::function<void(http::Request&, http::Response&)>;
 
@@ -37,5 +41,6 @@ namespace http {
         ~Server();
         void listen_and_serve();
         void handle(const std::string &route, function func);
+        void handle_static_files(const std::string &path);
     };
 }

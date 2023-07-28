@@ -153,4 +153,28 @@ namespace http {
         std::regex route_regex(route);
         routes.push_back(std::make_pair(route_regex, func));
     }
+
+    void Server::handle_static_files(const std::string &path) {
+        if (!fs::is_directory(path)) { throw std::invalid_argument("Not a valid directory"); }
+        for (const auto &file: fs::recursive_directory_iterator(path)) {
+            std::string file_path = file.path();
+            std::string file_name = fs::path(file_path).filename();
+            // recursive_directory_operator returns directory names
+            // as well, parse file name using filesystem and if it's
+            // not empty, handle the file.
+            if (!file_name.empty()) {
+                // Create a lambda function to serve the files in the static
+                // directory.
+                handle("/" + file_name, [file_path](Request &req, Response &res) {
+                    std::ifstream _file;
+                    std::ostringstream stream;
+                    _file.open(file_path);
+                    stream << _file.rdbuf();
+                    res.set_status_code(http::Status::OK);
+                    res.set_body(stream.str());
+                    _file.close();
+                });
+            }
+        }
+    }
 }
