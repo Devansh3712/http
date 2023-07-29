@@ -14,11 +14,6 @@ namespace http {
         start_line = request.substr(begin, end - begin);
         stream.str(start_line);
         stream >> method >> _path >> _version;
-        // While testing, sometimes the browser (Chrome) was sending empty
-        // HTTP requests, and the http::to_method function was throwing an
-        // error. Thus, this a temporary fix while I figure out the actual
-        // problem.
-        if (method.empty() || _path.empty() || _version.empty()) { return; }
         _method = http::to_method(method);
 
         // Parse query parameters
