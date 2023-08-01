@@ -1,14 +1,11 @@
-#include <fstream>
-#include <sstream>
-
 #include "../include/server.hpp"
 
-void home(http::Request &req, http::Response &res) {
+void page(http::Request &req, http::Response &res, const std::string &file_name) {
     std::ifstream file;
     std::ostringstream stream;
     switch (req.method()) {
     case http::Method::GET:
-        file.open("./docs/index.html");
+        file.open("./docs/" + file_name);
         stream << file.rdbuf();
         res.set_status_code(http::Status::OK);
         res.set_content_type(http::MIME::HTML);
@@ -20,10 +17,14 @@ void home(http::Request &req, http::Response &res) {
     }
 }
 
+void home(http::Request &req, http::Response &res) { page(req, res, "index.html"); }
+
+void methods(http::Request &req, http::Response &res) { page(req, res, "methods.html"); }
+
 void not_found(http::Request &req, http::Response &res) {
     std::ifstream file;
     std::ostringstream stream;
-    file.open("./docs/notFound.html");
+    file.open("./docs/404.html");
     stream << file.rdbuf();
     res.set_status_code(http::Status::NOT_FOUND);
     res.set_content_type(http::MIME::HTML);
@@ -35,6 +36,7 @@ int main() {
     server.handle_static_files("./docs/static");
 
     server.handle(R"(^(\/)home(\/)?$)", home);
+    server.handle(R"(^(\/)methods(\/)?$)", methods);
     server.handle(R"(^(\/)(.*)$)", not_found);
     server.listen_and_serve();
     return 0;

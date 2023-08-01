@@ -18,8 +18,18 @@ h1 {
 	font-size: 40px;
 }
 
+li {
+	font-size: 18px;
+	padding: 3px;
+}
+
 p {
 	font-size: 18px;
+}
+
+body .include {
+	background-color: #272822;
+	color: #ffffff;
 }
 
 body .gist .highlight {
