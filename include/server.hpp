@@ -29,7 +29,7 @@ using function = std::function<void(http::Request&, http::Response&)>;
 
 namespace http {
     class Server {
-    private:
+    protected:
         unsigned int port;
         int sockfd;
         int addr_len;

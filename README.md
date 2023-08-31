@@ -11,6 +11,8 @@ It can then be handled using the `handle` function, which requires a string rout
 > **Note**
 > All classes and functions are under the namespace `http`.
 
+### HTTP Server
+
 ```cpp
 #include "../include/server.hpp"
 
@@ -33,6 +35,36 @@ int main() {
     server.handle("/", root);
     // Handle a route using lambda function, the endpoint can be a
     // regular expression.
+    server.handle(R"(^(\/)(.*)$)", [](http::Request &req, http::Response &res) {
+        res.set_status(http::Status::NOT_FOUND);
+    })
+    server.listen_and_serve();
+    return 0;
+}
+```
+
+### HTTPS Server (TLS)
+
+```cpp
+#include "../include/sslserver.hpp"
+
+void root(http::Request &req, http::Response &res) {
+    http::Method method = req.method();
+    switch (method) {
+    case http::Method::GET:
+        res.set_status(http::Status::OK);
+        res.set_content_type(http::MIME::TXT);
+        res.set_body("Hello World!");
+        return;
+    default:
+        res.set_status(http::Status::METHOD_NOT_ALLOWED);
+        return;
+    }
+}
+
+int main() {
+    http::TLSServer server(8080, "<ssl_certificate_path>", "<ssl_private_key_path>");
+    server.handle("/", root);
     server.handle(R"(^(\/)(.*)$)", [](http::Request &req, http::Response &res) {
         res.set_status(http::Status::NOT_FOUND);
     })
