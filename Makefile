@@ -1,7 +1,6 @@
 .PHONY: test docs clean
 
-FLAGS = -lstdc++fs -std=c++17
-SSL_FLAGS = -L/usr/local/ssl/lib -lssl -lcrypto
+FLAGS = -lstdc++fs -std=c++17 -L/usr/local/ssl/lib -lssl -lcrypto
 
 test:
 	g++ -o main test/main.cpp src/*.cpp $(FLAGS)
